@@ -1,0 +1,402 @@
+<!DOCTYPE html>
+<html lang="mn">
+<head>
+  <meta charset="UTF-8" />
+  <title>Төрсөн өдрийн мэнд, Ewa!</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: #fff;
+      color: #222;
+      text-align: center;
+      overflow: hidden;
+      position: relative;
+      height: 100vh;
+    }
+
+    .slide-text {
+      font-size: 1.8em;
+      opacity: 0;
+      transition: opacity 1s ease;
+      position: absolute;
+      left: 50%;
+      top: 30%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+      z-index: 10;
+    }
+
+    .slide-text.visible {
+      opacity: 1;
+    }
+
+    .slide-with-gif {
+      position: relative;
+    }
+
+    .slide-with-gif img.gif-on-slide {
+      position: absolute;
+      right: -220px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      border-radius: 10px;
+      z-index: 5;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    .slide-with-gif.visible img.gif-on-slide {
+      opacity: 1;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      justify-content: start;
+      border: 1px solid #ccc;
+      border-radius: 24px;
+      padding: 10px 20px;
+      width: 90%;
+      max-width: 600px;
+      margin: 20px auto;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+      font-size: 1.2em;
+      background: #fff;
+      font-family: 'Segoe UI', sans-serif;
+      position: relative;
+      z-index: 10;
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .search-box.clicked {
+      transform: scale(0.98);
+      box-shadow: 0 0 8px rgba(26, 115, 232, 0.5);
+    }
+
+    .search-icon {
+      margin-right: 10px;
+      color: gray;
+    }
+
+    .cursor {
+      animation: blink 1s infinite;
+      color: #444;
+    }
+
+    @keyframes blink {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0; }
+    }
+
+    #search {
+      position: absolute;
+      top: 40%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      width: 90%;
+      max-width: 600px;
+      opacity: 0;
+      transition: opacity 1s ease;
+      z-index: 10;
+    }
+
+    #searching {
+      opacity: 0;
+      font-size: 1.2em;
+      color: gray;
+      margin-top: 10px;
+      transition: opacity 0.5s ease;
+      position: relative;
+      z-index: 10;
+    }
+
+    #answerSlide {
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      font-size: 1.5em;
+      color: #1a73e8;
+      opacity: 0;
+      transition: opacity 1s ease;
+      width: 90%;
+      max-width: 600px;
+      z-index: 10;
+    }
+
+    #answerSlide.visible {
+      opacity: 1;
+    }
+
+    #answerSlide img {
+      position: absolute;
+      right: -220px;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 200px;
+      border-radius: 10px;
+      z-index: 5;
+    }
+
+    #praiseSlide {
+      top: 55%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      position: absolute;
+      font-size: 1.4em;
+      opacity: 0;
+      transition: opacity 1s ease;
+      width: 90%;
+      max-width: 600px;
+      color: #222;
+      text-align: center;
+      z-index: 10;
+    }
+
+    #praiseSlide.visible {
+      opacity: 1;
+    }
+
+    .praise {
+      opacity: 0;
+      margin: 10px 0;
+      transition: opacity 1s ease;
+    }
+
+    /* Gift Slide */
+    #giftSlide {
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      opacity: 0;
+      transition: opacity 1s ease;
+      text-align: center;
+      z-index: 20;
+      max-width: 400px;
+      width: 90%;
+    }
+
+    #giftSlide img {
+      width: 150px;
+      animation: bounceIn 1s forwards;
+      opacity: 0;
+      margin-bottom: 15px;
+    }
+
+    #giftSlide.visible img {
+      opacity: 1;
+    }
+
+    #giftText {
+      font-size: 2em;
+      font-weight: bold;
+      color: #e91e63;
+      text-shadow: 0 0 10px #e91e63;
+      opacity: 0;
+      transition: opacity 1s ease;
+    }
+
+    #giftText.visible {
+      opacity: 1;
+    }
+
+    /* Bounce animation for gift */
+    @keyframes bounceIn {
+      0% {
+        opacity: 0;
+        transform: scale(0.3) translateY(50px);
+      }
+      50% {
+        opacity: 1;
+        transform: scale(1.1) translateY(-10px);
+      }
+      70% {
+        transform: scale(0.9) translateY(5px);
+      }
+      100% {
+        opacity: 1;
+        transform: scale(1) translateY(0);
+      }
+    }
+
+    audio {
+      display: none;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Slide 1 -->
+  <div id="text1" class="slide-text slide-with-gif visible">
+    Сайн уу хайрт минь ☺️
+    <img class="gif-on-slide" src="5.gif" alt="Cute gif" />
+  </div>
+
+  <!-- Slide 2 -->
+  <div id="text2" class="slide-text slide-with-gif">
+          Чи минь хамгийн хөөрхөн шүү. Итгэхгүй бол интернэтээс хайгаад үзэх үү 
+    <img class="gif-on-slide" src="6.gif" alt="Cute gif" />
+  </div>
+
+  <!-- Search -->
+  <div id="search">
+    <div class="search-box">
+      <span class="search-icon">🔍</span>
+      <span id="typed-text"></span><span class="cursor">|</span>
+    </div>
+    <div id="searching">Хайж байна...</div>
+  </div>
+
+  <!-- Answer Slide -->
+  <div id="answerSlide" class="slide-with-gif">
+    → Мэдээж Эва бол энэ дэлхийн хамгийн үзэсгэлэнтэй, хөөрхөн эмэгтэй!😍
+    <img class="gif-on-slide" src="1.gif" alt="Cute gif" />
+  </div>
+
+  <!-- Praise Slide -->
+  <div id="praiseSlide">
+    <img src="2.gif" alt="Cute gif" style="width: 150px; border-radius: 10px; margin-bottom: 20px;">
+    <div class="praise" id="p1"> Чи минь хамгийн ухаантай.</div>
+    <div class="praise" id="p2"> Сайхан сэтгэлтэй мөн хамгийн хөөрхөн нь </div>
+    <div class="praise" id="p3"> Чиний минь инээмсэглэл ертөнцийг гэрэлтүүлдэг.</div>
+    <div class="praise" id="p4"> Чи минь хамгийн бүр хамгийн сайхан нь </div>
+  </div>
+
+  <!-- Gift Slide -->
+  <div id="giftSlide">
+    <img src="gifbox.png" alt="Gift Box" id="giftImg" />
+    <div id="giftText">Төрсөн өдрийн мэнд хүргэе.
+                  Хайртай шүү чамдаа зөндөө хайртай шүү.❤️</div>
+  </div>
+
+  <!-- Background Music -->
+  <audio id="bgMusic" autoplay loop>
+    <source src="EVERYTHINА2.mp3" type="audio/mpeg" />
+    Таны браузер дуу тоглуулахгүй байна.
+  </audio>
+
+  <script>
+    const slides = ['text1', 'text2'];
+    let currentSlide = 0;
+
+    function showNextSlide() {
+      if (currentSlide > 0) {
+        document.getElementById(slides[currentSlide - 1]).classList.remove('visible');
+      }
+
+      if (currentSlide < slides.length) {
+        document.getElementById(slides[currentSlide]).classList.add('visible');
+        currentSlide++;
+        setTimeout(showNextSlide, 3000);
+      } else {
+        slides.forEach(id => {
+          const slide = document.getElementById(id);
+          const gif = slide.querySelector('img.gif-on-slide');
+          if (gif) gif.style.opacity = 0;
+        });
+
+        setTimeout(() => {
+          document.getElementById("search").style.opacity = 1;
+          startTypingEffect();
+        }, 1000);
+      }
+    }
+
+    const text = "энэ дэлхийн хамгийн үзэсгэлэнтэй, хөөрхөн эмэгтэй хэн бэ?";
+    const typedText = document.getElementById("typed-text");
+    const searchingText = document.getElementById("searching");
+    let index = 0;
+
+    function startTypingEffect() {
+      typedText.textContent = "";
+      index = 0;
+      searchingText.style.opacity = 0;
+      typeNextChar();
+    }
+
+    function typeNextChar() {
+      if (index < text.length) {
+        typedText.textContent += text.charAt(index);
+        index++;
+
+        // Search box animation for click effect
+        const searchBox = document.querySelector('.search-box');
+        searchBox.classList.add('clicked');
+        setTimeout(() => searchBox.classList.remove('clicked'), 150);
+
+        setTimeout(typeNextChar, 80);
+      } else {
+        // Хайлт дууссан, хайж байна гэж үзүүлээд дараа үр дүн үзүүлэх
+        setTimeout(() => {
+          searchingText.style.opacity = 1;
+
+          setTimeout(() => {
+            document.getElementById("search").style.opacity = 0;
+            searchingText.style.opacity = 0;
+
+            showAnswerSlide();
+          }, 1500);
+        }, 300);
+      }
+    }
+
+    function showAnswerSlide() {
+      const answerSlide = document.getElementById("answerSlide");
+      answerSlide.classList.add("visible");
+
+      setTimeout(() => {
+        answerSlide.classList.remove("visible");
+        showPraiseSlide();
+      }, 3500);
+    }
+
+    function showPraiseSlide() {
+      const praiseSlide = document.getElementById("praiseSlide");
+      praiseSlide.classList.add("visible");
+
+      const praiseIds = ['p1', 'p2', 'p3', 'p4'];
+      praiseIds.forEach((id, i) => {
+        setTimeout(() => {
+          const elem = document.getElementById(id);
+          elem.style.opacity = 1;
+        }, i * 2500);
+      });
+
+      setTimeout(() => {
+        praiseSlide.classList.remove("visible");
+        praiseSlide.style.opacity = 0;
+
+        showGiftSlide();
+      }, praiseIds.length * 2500 + 1000);
+    }
+
+    function showGiftSlide() {
+      const giftSlide = document.getElementById('giftSlide');
+      const giftImg = document.getElementById('giftImg');
+      const giftText = document.getElementById('giftText');
+
+      giftSlide.style.opacity = 1;
+      giftImg.style.animation = 'bounceIn 1s forwards';
+      giftImg.style.opacity = 1;
+
+      setTimeout(() => {
+        giftText.classList.add('visible');
+      }, 800);
+    }
+
+    window.onload = () => {
+      document.body.addEventListener('click', () => {
+        document.getElementById("bgMusic").play().catch(() => {});
+      }, { once: true });
+
+      setTimeout(showNextSlide, 2000);
+    };
+  </script>
+
+</body>
+</html>
